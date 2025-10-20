@@ -4,6 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Welcome to The Quiet Corner Bookstore</title>
+
+  <!-- Cozy serif fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -12,60 +16,85 @@
       <h1 class="shop-title">The Quiet Corner Bookstore</h1>
       <p class="subtitle">Step inside — choose a book and open its page.</p>
       <button id="enterBtn" class="enter-cta" aria-label="Enter the bookstore">Enter</button>
+      <p class="hint">Tip: Click a spine to open the book</p>
     </header>
 
     <main id="bookroom" class="bookroom hidden" aria-hidden="true">
+      <div class="room-ambient">
+        <div class="lamp"></div>
+      </div>
+
       <div class="shelf">
         <div class="shelf-top"></div>
         <div class="books">
-          <!-- Each book is an anchor to its own page. -->
-          <a class="book-link book" href="book1.html" data-title="The Clockmaker's Lantern">
-            <div class="spine spine-1"><span class="book-text">The Clockmaker's Lantern</span></div>
+          <!-- Each book is an anchor to its own page. data-size gives slight height/width variety -->
+          <a class="book-link book" href="book1.html" data-title="The Clockmaker's Lantern" data-size="tall">
+            <div class="spine spine-1">
+              <span class="book-text">The Clockmaker's Lantern</span>
+            </div>
             <div class="cover">Eliza Hart</div>
           </a>
 
-          <a class="book-link book" href="book2.html" data-title="Whispers in the Stacks">
-            <div class="spine spine-2"><span class="book-text">Whispers in the Stacks</span></div>
+          <a class="book-link book" href="book2.html" data-title="Whispers in the Stacks" data-size="short">
+            <div class="spine spine-2">
+              <span class="book-text">Whispers in the Stacks</span>
+            </div>
             <div class="cover">Rowan Vale</div>
           </a>
 
-          <a class="book-link book" href="book3.html" data-title="Midnight Cartography">
-            <div class="spine spine-3"><span class="book-text">Midnight Cartography</span></div>
+          <a class="book-link book" href="book3.html" data-title="Midnight Cartography" data-size="med">
+            <div class="spine spine-3">
+              <span class="book-text">Midnight Cartography</span>
+            </div>
             <div class="cover">S. L. Cortez</div>
           </a>
 
-          <a class="book-link book" href="book4.html" data-title="The Paper Alchemist">
-            <div class="spine spine-4"><span class="book-text">The Paper Alchemist</span></div>
+          <a class="book-link book" href="book4.html" data-title="The Paper Alchemist" data-size="med">
+            <div class="spine spine-4">
+              <span class="book-text">The Paper Alchemist</span>
+            </div>
             <div class="cover">Kaito Moriyama</div>
           </a>
 
-          <a class="book-link book" href="book5.html" data-title="Quiet Revolutions">
-            <div class="spine spine-5"><span class="book-text">Quiet Revolutions</span></div>
+          <a class="book-link book" href="book5.html" data-title="Quiet Revolutions" data-size="short">
+            <div class="spine spine-5">
+              <span class="book-text">Quiet Revolutions</span>
+            </div>
             <div class="cover">Amaya Reed</div>
           </a>
 
-          <a class="book-link book" href="book6.html" data-title="Atlas of Forgotten Roads">
-            <div class="spine spine-6"><span class="book-text">Atlas of Forgotten Roads</span></div>
+          <a class="book-link book" href="book6.html" data-title="Atlas of Forgotten Roads" data-size="tall">
+            <div class="spine spine-6">
+              <span class="book-text">Atlas of Forgotten Roads</span>
+            </div>
             <div class="cover">Tobias March</div>
           </a>
 
-          <a class="book-link book" href="book7.html" data-title="Inkbound Chronicles">
-            <div class="spine spine-7"><span class="book-text">Inkbound Chronicles</span></div>
+          <a class="book-link book" href="book7.html" data-title="Inkbound Chronicles" data-size="med">
+            <div class="spine spine-7">
+              <span class="book-text">Inkbound Chronicles</span>
+            </div>
             <div class="cover">Maren Sol</div>
           </a>
 
-          <a class="book-link book" href="book8.html" data-title="The Ninth Binding">
-            <div class="spine spine-8"><span class="book-text">The Ninth Binding</span></div>
+          <a class="book-link book" href="book8.html" data-title="The Ninth Binding" data-size="short">
+            <div class="spine spine-8">
+              <span class="book-text">The Ninth Binding</span>
+            </div>
             <div class="cover">L. R. Pembroke</div>
           </a>
 
-          <a class="book-link book" href="book9.html" data-title="Songs for Empty Shelves">
-            <div class="spine spine-9"><span class="book-text">Songs for Empty Shelves</span></div>
+          <a class="book-link book" href="book9.html" data-title="Songs for Empty Shelves" data-size="med">
+            <div class="spine spine-9">
+              <span class="book-text">Songs for Empty Shelves</span>
+            </div>
             <div class="cover">Nora Finn</div>
           </a>
 
-          <a class="book-link book" href="book10.html" data-title="Aisles of Maybe">
-            <div class="spine spine-10"><span class="book-text">Aisles of Maybe</span></div>
+          <a class="book-link book" href="book10.html" data-title="Aisles of Maybe" data-size="tall">
+            <div class="spine spine-10">
+              <span class="book-text">Aisles of Maybe</span>
+            </div>
             <div class="cover">Jonah Kest</div>
           </a>
         </div>
@@ -77,8 +106,14 @@
     <div id="transitionOverlay" class="overlay" aria-hidden="true"></div>
   </div>
 
+  <!-- Click/pop and a gentle ambient (start on interaction) -->
   <audio id="clickFX" preload="auto">
     <source src="https://actions.google.com/sounds/v1/cartoon/pop.ogg" type="audio/ogg">
+  </audio>
+
+  <audio id="ambientLoop" loop preload="auto">
+    <!-- soft ambient sound (public sound) - user gesture required to start -->
+    <source src="https://actions.google.com/sounds/v1/ambiences/coffee_shop.ogg" type="audio/ogg">
   </audio>
 
   <script src="script.js"></script>
