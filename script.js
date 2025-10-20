@@ -1,54 +1,63 @@
-// Simple interactive behavior for the bookstore:
-// - 'Enter' button reveals the shelf
-// - Clicking a book plays a click sound & fades in an overlay before navigating
-// - Back links are handled similarly for a smooth transition
+// Bookstore interactions (cozy version)
+// - Enter reveals bookshelf, starts ambient after user gesture
+// - Clicking a book plays click and transitions to the book page
+// - Back links behave similarly on book pages
 
 (function(){
   const enterBtn = document.getElementById('enterBtn');
   const bookroom = document.getElementById('bookroom');
   const overlay = document.getElementById('transitionOverlay');
   const clickFX = document.getElementById('clickFX');
+  const ambient = document.getElementById('ambientLoop');
 
-  // Show the bookshelf when Enter is clicked
+  // Helper to play sound (guard for autoplay/muted browsers)
+  function tryPlayAudio(audioEl){
+    if(!audioEl) return;
+    try {
+      audioEl.currentTime = 0;
+      const p = audioEl.play();
+      if(p && p.catch){
+        p.catch(()=>{/* ignore autoplay restrictions */});
+      }
+    } catch(e){}
+  }
+
+  // Reveal the bookshelf and start ambient audio (user gesture required)
   enterBtn && enterBtn.addEventListener('click', (e) => {
     e.preventDefault();
     enterBtn.disabled = true;
     enterBtn.classList.add('pressed');
-    // subtle delay to let user feel the entrance
+    // small entrance animation delay
     setTimeout(() => {
       document.querySelector('.entry').style.display = 'none';
       bookroom.classList.remove('hidden');
       bookroom.setAttribute('aria-hidden', 'false');
-      // focus the first book for accessibility
       const first = document.querySelector('.book-link');
       first && first.focus();
-    }, 300);
+      // Start gentle ambient sound on user gesture
+      tryPlayAudio(ambient);
+    }, 320);
   });
 
-  // Helper to play sound (guard for mobile autoplay)
-  function tryPlaySound(){
-    try {
-      clickFX.currentTime = 0;
-      clickFX.play().catch(()=>{/* ignore autoplay restrictions */});
-    } catch(e){}
+  // Play click/pop sound safely
+  function tryPlayClick(){
+    tryPlayAudio(clickFX);
   }
 
   // Attach handlers to book links
   document.querySelectorAll('.book-link').forEach(a => {
     a.addEventListener('click', function(e){
-      // Normal navigation is replaced with a smooth overlay
       e.preventDefault();
       const href = this.getAttribute('href');
-      // Play sound
-      tryPlaySound();
-      // Show overlay
+      // Play click
+      tryPlayClick();
+      // Add a soft overlay and slight scale for a tactile transition
       overlay.classList.add('show');
       overlay.setAttribute('aria-hidden','false');
-      // After a short delay, go to page
-      setTimeout(() => { window.location.href = href; }, 380);
+      document.body.style.filter = 'brightness(0.95)';
+      setTimeout(() => { window.location.href = href; }, 420);
     });
 
-    // allow keyboard activate with Enter/Space for non-anchor behavior
     a.addEventListener('keydown', (ev) => {
       if(ev.key === 'Enter' || ev.key === ' '){
         ev.preventDefault();
@@ -57,24 +66,25 @@
     });
   });
 
-  // For back links on book pages, handle them the same way
-  // This script runs on every page; if a .back-link exists, attach overlay nav
+  // Back links (on book pages) should show overlay and navigate back
   document.querySelectorAll('.back-link').forEach(b => {
     b.addEventListener('click', function(e){
       e.preventDefault();
-      tryPlaySound();
+      tryPlayClick();
       overlay.classList.add('show');
       overlay.setAttribute('aria-hidden','false');
-      const href = this.getAttribute('href');
-      setTimeout(()=>{ window.location.href = href; }, 320);
+      setTimeout(()=>{ window.location.href = this.getAttribute('href'); }, 320);
     });
   });
 
-  // Prevent overlay from trapping focus if visible (simple)
+  // Allow clicking overlay to cancel transition
   overlay.addEventListener('click', () => {
-    // allow the user to cancel transition by clicking overlay (optional)
     overlay.classList.remove('show');
     overlay.setAttribute('aria-hidden','true');
+    document.body.style.filter = '';
   });
+
+  // Accessibility: stop ambient sound when navigating away/inactive
+  window.addEventListener('pagehide', () => { if(ambient){ ambient.pause(); ambient.currentTime = 0; } });
 
 })();
