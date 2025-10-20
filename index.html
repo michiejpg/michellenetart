@@ -1,1 +1,129 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Persona 5 Themed Intro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Bangers&display=swap');
+    body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      color: #fff;
+      font-family: 'Bangers', cursive, Arial, sans-serif;
+      overflow: hidden;
+    }
+    .p5-bg {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(135deg, #d90429 60%, #000 40%);
+      z-index: 1;
+      opacity: 0.85;
+    }
+    .title {
+      position: absolute;
+      top: 18vh;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 5vw;
+      text-shadow: 4px 4px 0 #fff, 8px 8px 0 #d90429, 12px 12px 0 #000;
+      letter-spacing: 0.1em;
+      z-index: 2;
+      animation: slideDown 1.2s cubic-bezier(.68,-0.55,.27,1.55) forwards;
+      opacity: 0;
+    }
+    @keyframes slideDown {
+      from {top: 0; opacity: 0;}
+      to {top: 18vh; opacity: 1;}
+    }
+    .enter-btn {
+      position: absolute;
+      left: 50%;
+      top: 60vh;
+      transform: translateX(-50%);
+      background: #fff;
+      color: #d90429;
+      font-size: 2vw;
+      font-family: 'Bangers', cursive, Arial, sans-serif;
+      padding: 1vw 3vw;
+      border: 6px solid #000;
+      border-radius: 100px;
+      cursor: pointer;
+      z-index: 3;
+      box-shadow: 0 0 20px #d90429, 0 0 40px #000 inset;
+      transition: background .2s, color .2s, box-shadow .2s;
+      animation: popIn 1.2s 1s cubic-bezier(.68,-0.55,.27,1.55) forwards;
+      opacity: 0;
+    }
+    @keyframes popIn {
+      from { top: 80vh; opacity: 0; }
+      to { top: 60vh; opacity: 1; }
+    }
+    .enter-btn:hover {
+      background: #d90429;
+      color: #fff;
+      box-shadow: 0 0 40px #fff, 0 0 80px #d90429 inset;
+      border: 6px solid #fff;
+    }
+    .masked {
+      position: absolute;
+      top: 40vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12vw;
+      z-index: 2;
+      opacity: 0.97;
+      animation: fadeIn 2s 0.5s forwards;
+      opacity: 0;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 0.97;}
+    }
+    .hidden-main {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2vw;
+      z-index: 10;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s;
+    }
+    .hidden-main.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+  </style>
+</head>
+<body>
+  <div class="p5-bg"></div>
+  <div class="title">Persona 5: Welcome!</div>
+  <!-- You can replace the src below with your own Persona 5 mask PNG or SVG for better effect -->
+  <img class="masked" src="https://static.wikia.nocookie.net/megamitensei/images/6/61/P5_Mask.png" alt="Phantom Thief Mask">
+  <button class="enter-btn" id="enterBtn">Enter the Metaverse</button>
+  <div class="hidden-main" id="mainContent">
+    <div>
+      <h1>Let’s Steal Your Heart!</h1>
+      <p>This is your Persona 5-themed intro page.<br>
+         Add your content here or redirect to your main site.</p>
+    </div>
+  </div>
+  <audio id="soundFX" src="https://actions.google.com/sounds/v1/cartoon/pop.ogg" preload="auto"></audio>
+  <script>
+    document.getElementById('enterBtn').addEventListener('click', function() {
+      document.getElementById('mainContent').classList.add('visible');
+      document.getElementById('soundFX').play();
+    });
+  </script>
+</body>
+</html>
