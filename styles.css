@@ -1,17 +1,21 @@
 :root{
-  --bg:#efe6da;
-  --shelf:#6b4a2c;
+  --bg:#efe6d9;
+  --shelf:#5a3b24;
+  --shelf-edge:#3f2a1d;
   --accent:#9c2b2b;
   --muted:#5a5a5a;
   --book-gap:1rem;
   --max-width:1100px;
+  --light: rgba(255,230,190,0.9);
 }
 
+/* Basic reset */
 *{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+html,body{height:100%;margin:0;font-family:"Merriweather", serif;}
 body{
-  background: radial-gradient(1200px 400px at 10% 10%, rgba(0,0,0,0.04), transparent),
-              linear-gradient(180deg, #fff 0%, var(--bg) 100%);
+  background:
+    radial-gradient(800px 300px at 10% 8%, rgba(0,0,0,0.06), transparent),
+    linear-gradient(180deg, #fff 0%, var(--bg) 100%);
   color:#222;
   display:flex;
   align-items:center;
@@ -25,47 +29,75 @@ body{
 /* Entry header */
 .entry{
   text-align:center;
-  padding:3rem 1rem;
+  padding:2.5rem 1.25rem;
   border-radius:12px;
-  background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.6));
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
 }
 .shop-title{
-  font-size:2.1rem;
+  font-family:"Playfair Display", serif;
+  font-size:2.4rem;
   margin:0;
   letter-spacing:0.02em;
+  color: #4b2f24;
 }
-.subtitle{color:var(--muted);margin:0.5rem 0 1.5rem}
+.subtitle{color:var(--muted);margin:0.5rem 0 1rem;font-style:italic}
+.hint{color:#7a5e4a;margin-top:.6rem;font-size:.95rem}
 
 /* Enter CTA */
 .enter-cta{
   background:var(--accent);
   color:#fff;
   border:0;
-  padding:.8rem 1.6rem;
-  font-weight:600;
+  padding:.75rem 1.6rem;
+  font-weight:700;
   border-radius:999px;
   cursor:pointer;
-  box-shadow:0 6px 14px rgba(156,43,43,0.35);
+  box-shadow:0 8px 22px rgba(156,43,43,0.28);
   transition:transform .18s ease, box-shadow .18s;
+  font-family:inherit;
 }
 .enter-cta:active{transform:translateY(1px)}
 .enter-cta:focus{outline:3px solid rgba(156,43,43,0.18)}
 
-/* Bookroom - initially hidden */
+/* Bookroom hidden until entrance */
 .bookroom.hidden{display:none}
-.bookroom{margin-top:1.5rem;}
+.bookroom{margin-top:1.25rem;}
 
-/* Shelf look */
-.shelf{
-  background:linear-gradient(180deg,#f8f2ea,#efe6da);
-  border-radius:10px;
-  padding:2rem;
-  box-shadow:0 8px 30px rgba(0,0,0,0.08);
-  position:relative;
+/* Ambient lamp */
+.room-ambient{position:relative;height:68px;margin-bottom:0.75rem}
+.lamp{
+  position:absolute;
+  left:8%;
+  top:0;
+  width:80px;height:80px;border-radius:50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255,245,210,0.95), rgba(255,230,180,0.75) 40%, rgba(255,200,150,0.2) 60%, transparent 65%);
+  filter: blur(10px);
+  box-shadow: 0 20px 60px rgba(255,200,120,0.12);
 }
-.shelf-top{height:12px;background:linear-gradient(90deg,#caa58a,#b68462);border-radius:8px;}
-.shelf-bottom{height:36px;background:var(--shelf);border-radius:6px;margin-top:1rem;box-shadow:inset 0 6px 12px rgba(0,0,0,0.12)}
+
+/* Shelf with wood grain */
+.shelf{
+  background:
+    linear-gradient(180deg,#fbf5ee,#f0e7d8);
+  border-radius:10px;
+  padding:1.25rem;
+  box-shadow:0 12px 40px rgba(0,0,0,0.08);
+  position:relative;
+  overflow:hidden;
+}
+.shelf::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.02) 0 2px, transparent 2px 8px),
+    linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.03) 70%);
+  mix-blend-mode: multiply;
+  pointer-events:none;
+}
+.shelf-top{height:12px;background:linear-gradient(90deg,#d2b792,#b78f69);border-radius:8px;}
+.shelf-bottom{height:36px;background:var(--shelf);border-radius:6px;margin-top:1rem;box-shadow:inset 0 6px 12px rgba(0,0,0,0.16)}
 
 /* Books row */
 .books{
@@ -76,7 +108,10 @@ body{
   justify-content:flex-start;
   overflow-x:auto;
   scroll-snap-type:x proximity;
+  padding-bottom:0.5rem;
 }
+
+/* Book link container */
 .book{
   display:flex;
   flex-direction:column;
@@ -86,54 +121,49 @@ body{
   scroll-snap-align:center;
   transition:transform .28s cubic-bezier(.2,.9,.3,1), filter .28s;
   cursor:pointer;
-  width:120px;
+  width:96px; /* overall clickable area */
+  user-select:none;
+  position:relative;
 }
-.book:focus{outline:3px solid rgba(0,0,0,0.12)}
-.book:hover{transform:translateY(-10px) scale(1.03); filter:brightness(1.05)}
+.book:focus{outline:3px solid rgba(0,0,0,0.08); border-radius:6px}
+.book:hover{transform:translateY(-10px) scale(1.03); filter:brightness(1.03)}
 
-/* Spine + cover styling */
+/* spine + cover - make spines look like actual book spines */
 .spine{
-  width:48px;
-  height:160px;
-  border-radius:4px 4px 2px 2px;
+  width:64px;
+  height:180px;
+  border-radius:6px 6px 2px 2px;
   display:flex;
   align-items:center;
   justify-content:center;
-  color:#fff;
+  color:#fcf6ec;
   font-weight:700;
-  font-size:12px;
-  padding:6px;
+  font-size:13px;
+  padding:8px 6px;
   text-align:center;
   transform-origin:center;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.18);
-}
-.cover{
-  width:120px;
-  height:140px;
-  margin-top:10px;
-  background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.06));
-  border-radius:6px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:var(--muted);
-  font-size:12px;
-  box-shadow: 0 10px 26px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+  position:relative;
+  overflow:visible;
+  background-blend-mode: multiply;
+  border-left:1px solid rgba(255,255,255,0.06);
 }
 
-/* Different spine colors for variety */
-.spine-1{background:linear-gradient(180deg,#7f3f3f,#5a2323)}
-.spine-2{background:linear-gradient(180deg,#304b5a,#17313a)}
-.spine-3{background:linear-gradient(180deg,#3b2f5a,#22163e)}
-.spine-4{background:linear-gradient(180deg,#6b3f1d,#3e2410)}
-.spine-5{background:linear-gradient(180deg,#2f6b4a,#163d26)}
-.spine-6{background:linear-gradient(180deg,#5a4b2b,#35270f)}
-.spine-7{background:linear-gradient(180deg,#4a3b5a,#2b2037)}
-.spine-8{background:linear-gradient(180deg,#8b4a7a,#5a2c4e)}
-.spine-9{background:linear-gradient(180deg,#506b8b,#23364f)}
-.spine-10{background:linear-gradient(180deg,#7a5a33,#4a2e0f)}
+/* page-edge (right side of spine) */
+.spine::after{
+  content:"";
+  position:absolute;
+  right:-12px;
+  top:6px;
+  bottom:6px;
+  width:14px;
+  border-radius:0 3px 3px 0;
+  background: linear-gradient(90deg, #f9f6f2 0%, #efe7db 45%, #e8dfd4 100%);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.02);
+  transform:skewY(-2deg);
+}
 
-/* Book text on spine rotated to look like a spine */
+/* embossed vertical title */
 .book-text{
   transform: rotate(-90deg);
   display:block;
@@ -141,16 +171,90 @@ body{
   text-align:center;
   font-size:12px;
   line-height:1;
+  letter-spacing:0.06em;
+  font-variant: small-caps;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.45), 0 2px 0 rgba(255,255,255,0.04);
+  color: rgba(255,245,230,0.96);
+  -webkit-font-smoothing:antialiased;
+  pointer-events:none;
 }
 
-/* Overlay for transition */
+/* different spine textures and decorations */
+.spine-1{background:linear-gradient(180deg,#7f3f3f,#5a2323); box-shadow: 0 10px 26px rgba(0,0,0,0.25);}
+.spine-1::before,
+.spine-2::before,
+.spine-3::before,
+.spine-4::before,
+.spine-5::before,
+.spine-6::before,
+.spine-7::before,
+.spine-8::before,
+.spine-9::before,
+.spine-10::before{
+  content:"";
+  position:absolute;
+  left:10%;
+  right:10%;
+  top:18%;
+  height:4px;
+  border-radius:2px;
+  background: linear-gradient(90deg, rgba(255,215,140,0.95), rgba(245,200,100,0.85));
+  opacity:0.75;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12) inset;
+}
+
+/* give each spine a slightly different base */
+.spine-2{background:linear-gradient(180deg,#3a5a62,#183234)}
+.spine-3{background:linear-gradient(180deg,#3b2f5a,#22163e)}
+.spine-4{background:linear-gradient(180deg,#6b4a2d,#3e2410)}
+.spine-5{background:linear-gradient(180deg,#2f6b4a,#163d26)}
+.spine-6{background:linear-gradient(180deg,#5a4b2b,#35270f)}
+.spine-7{background:linear-gradient(180deg,#4a3b5a,#2b2037)}
+.spine-8{background:linear-gradient(180deg,#8b4a7a,#5a2c4e)}
+.spine-9{background:linear-gradient(180deg,#506b8b,#23364f)}
+.spine-10{background:linear-gradient(180deg,#7a5a33,#4a2e0f)}
+
+/* top/bottom bands or label boxes (vary by spine) */
+.spine-1 .book-text{letter-spacing:0.08em}
+.spine-2::before{top:12%;height:6px;opacity:0.9}
+.spine-3::before{top:24%;height:3px;opacity:0.85}
+.spine-4::before{top:16%;height:5px;opacity:0.9}
+.spine-5::before{top:20%;height:4px;opacity:0.8}
+
+/* slight height variations */
+.book[data-size="short"] .spine{height:150px}
+.book[data-size="med"] .spine{height:170px}
+.book[data-size="tall"] .spine{height:190px}
+
+/* cover (visible face) - small label where author shows */
+.cover{
+  width:92px;
+  height:124px;
+  margin-top:12px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.04));
+  border-radius:6px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--muted);
+  font-size:12px;
+  box-shadow: 0 12px 34px rgba(0,0,0,0.08);
+}
+
+/* hover tilt 3D feel */
+.book:hover .spine{
+  transform: rotateZ(-3deg) translateY(-6px) rotateX(6deg);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.32);
+}
+
+/* overlay for transition */
 .overlay{
   position:fixed;
   inset:0;
-  background:linear-gradient(180deg,rgba(0,0,0,0.0), rgba(0,0,0,0.65));
+  background:linear-gradient(180deg,rgba(0,0,0,0.0), rgba(0,0,0,0.72));
   opacity:0;
   pointer-events:none;
-  transition:opacity .5s ease;
+  transition:opacity .45s ease;
   z-index:60;
 }
 .overlay.show{opacity:1; pointer-events:auto}
@@ -170,12 +274,13 @@ body{
   display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;padding:1rem}
 .book-meta h2{margin:0 0 .4rem 0}
 .book-meta p{margin:.2rem 0;color:var(--muted)}
-.back-link{display:inline-block;margin-top:1rem;background:transparent;border:2px solid var(--accent);color:var(--accent);padding:.5rem 1rem;border-radius:999px;text-decoration:none}
-.back-link:focus{outline:3px solid rgba(156,43,43,0.12)}
+.back-link{display:inline-block;margin-top:1rem;background:transparent;border:2px solid var(--shelf-edge);color:var(--shelf-edge);padding:.5rem 1rem;border-radius:999px;text-decoration:none}
+.back-link:focus{outline:3px solid rgba(123,85,64,0.12)}
+
 /* Responsive tweaks */
 @media (max-width:720px){
   .book-hero{flex-direction:column;align-items:center}
-  .book{width:100px}
-  .spine{height:130px}
+  .book{width:86px}
+  .spine{height:140px;width:56px}
   .cover{height:110px}
 }
