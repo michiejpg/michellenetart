@@ -1,146 +1,159 @@
-// script.js - realistic overlapping scatter, randomized tilt/z-index, hotlink diagnostics
-(function () {
-  const itemsSelector = '.item';
-  const itemsContainer = document.getElementById('items');
-  const diag = document.getElementById('diag');
-  const diagList = document.getElementById('diag-list');
+// Using remote Unsplash Source URLs to avoid local assets.
+// Note: These URLs may return different images over time.
+// Swap with fixed photo IDs later for unchanging visuals.
 
-  function logDiag(msg) {
-    if (!diag) return;
-    diag.hidden = false;
-    const li = document.createElement('li');
-    li.textContent = msg;
-    diagList.appendChild(li);
+const ITEMS = [
+  {
+    id: "item1",
+    label: "Smudged Lipstick",
+    img: "https://source.unsplash.com/500x500/?lipstick,makeup,red",
+    alt: "A tube of lipstick, cap loose and color smudged",
+    href: "clues/clue-1.html",
+    top: "38%", left: "22%", width: 110, rot: -14, z: 2
+  },
+  {
+    id: "item2",
+    label: "Cracked Phone",
+    img: "https://source.unsplash.com/500x500/?broken,phone,cracked,screen",
+    alt: "A phone with a cracked screen, faint fingerprints visible",
+    href: "clues/clue-2.html",
+    top: "58%", left: "58%", width: 170, rot: 7, z: 2
+  },
+  {
+    id: "item3",
+    label: "Diner Receipt",
+    img: "https://source.unsplash.com/500x500/?receipt,paper",
+    alt: "A thermal receipt, edges wrinkled and ink fading",
+    href: "clues/clue-3.html",
+    top: "34%", left: "64%", width: 160, rot: -6, z: 2
+  },
+  {
+    id: "item4",
+    label: "House Key",
+    img: "https://source.unsplash.com/500x500/?house,key",
+    alt: "A single house key on a worn leather tag",
+    href: "clues/clue-4.html",
+    top: "70%", left: "34%", width: 120, rot: 18, z: 2
+  },
+  {
+    id: "item5",
+    label: "Matchbook",
+    img: "https://source.unsplash.com/500x500/?matchbook,matches",
+    alt: "A matchbook with a bar’s logo rubbed off",
+    href: "clues/clue-5.html",
+    top: "20%", left: "41%", width: 110, rot: 10, z: 2
+  },
+  {
+    id: "item6",
+    label: "Torn Polaroid",
+    img: "https://source.unsplash.com/500x500/?polaroid,photo",
+    alt: "A torn Polaroid photo, faces blurred by motion",
+    href: "clues/clue-6.html",
+    top: "49%", left: "16%", width: 150, rot: -3, z: 2
+  },
+  {
+    id: "item7",
+    label: "Bus Ticket",
+    img: "https://source.unsplash.com/500x500/?bus,ticket",
+    alt: "A bus ticket stub creased twice",
+    href: "clues/clue-7.html",
+    top: "63%", left: "74%", width: 150, rot: -8, z: 2
+  },
+  {
+    id: "item8",
+    label: "Broken Necklace",
+    img: "https://source.unsplash.com/500x500/?necklace,chain,broken",
+    alt: "A thin chain with a snapped clasp and a small initial charm",
+    href: "clues/clue-8.html",
+    top: "27%", left: "78%", width: 130, rot: 15, z: 2
+  },
+  {
+    id: "item9",
+    label: "Scribbled Note",
+    img: "https://source.unsplash.com/500x500/?note,handwriting,paper",
+    alt: "A small note card with hurried pencil writing",
+    href: "clues/clue-9.html",
+    top: "76%", left: "12%", width: 140, rot: -16, z: 2
+  },
+  {
+    id: "item10",
+    label: "Hotel Keycard",
+    img: "https://source.unsplash.com/500x500/?hotel,keycard",
+    alt: "A striped keycard with a dull sheen",
+    href: "clues/clue-10.html",
+    top: "14%", left: "14%", width: 120, rot: -2, z: 2
   }
+];
 
-  function rand(min, max) {
-    return Math.random() * (max - min) + min;
-  }
+function mountItems(){
+  const layer = document.getElementById('items-layer');
+  ITEMS.forEach(it => {
+    const a = document.createElement('a');
+    a.href = it.href;
+    a.className = 'item';
+    a.id = it.id;
+    a.setAttribute('aria-label', it.label);
+    a.style.top = it.top;
+    a.style.left = it.left;
+    a.style.width = it.width + 'px';
+    a.style.zIndex = String(it.z || 1);
+    a.style.setProperty('--rot', it.rot + 'deg');
 
-  // place items allowing slight overlaps; give a z-order and tilt for realism
-  function placeItemsPile() {
-    const items = Array.from(itemsContainer.querySelectorAll(itemsSelector));
-    const containerRect = itemsContainer.getBoundingClientRect();
+    const img = document.createElement('img');
+    img.src = it.img;
+    img.alt = it.alt || it.label;
 
-    // Prefer cluster center around table center with some spread
-    const centerX = containerRect.width * 0.52;
-    const centerY = containerRect.height * 0.52;
-    const spreadX = Math.max(120, containerRect.width * 0.38);
-    const spreadY = Math.max(120, containerRect.height * 0.36);
+    // Fallback label if image fails to load
+    const fallback = document.createElement('span');
+    fallback.className = 'fallback';
+    fallback.textContent = it.label;
+    fallback.style.display = 'none';
+    img.addEventListener('error', () => {
+      fallback.style.display = 'grid';
+    }, { once: true });
 
-    // Randomize a base offset for the pile so each load is different
-    const baseOffsetX = rand(-containerRect.width * 0.06, containerRect.width * 0.06);
-    const baseOffsetY = rand(-containerRect.height * 0.04, containerRect.height * 0.04);
+    a.appendChild(img);
+    a.appendChild(fallback);
 
-    // Shuffle items so z-order varies
-    const shuffled = items.sort(() => Math.random() - 0.5);
-
-    shuffled.forEach((el, idx) => {
-      const w = el.offsetWidth || 100;
-      const h = el.offsetHeight || 100;
-
-      // position biased toward pile center with gaussian-ish spread
-      const x = Math.round(centerX + baseOffsetX + (rand(-1,1) + rand(-1,1)) * 0.5 * spreadX - w/2);
-      const y = Math.round(centerY + baseOffsetY + (rand(-1,1) + rand(-1,1)) * 0.5 * spreadY - h/2);
-
-      el.style.left = Math.max(6, Math.min(containerRect.width - w - 6, x)) + 'px';
-      el.style.top = Math.max(6, Math.min(containerRect.height - h - 6, y)) + 'px';
-
-      // rotation - more subtle for realism
-      const rot = rand(-28, 28);
-      el.style.setProperty('--rot', rot + 'deg');
-
-      // tilt in X for fake 3D
-      const tiltX = rand(-6, 10);
-      el.style.setProperty('--tiltX', tiltX + 'deg');
-
-      // z-index: later items sit on top
-      const z = 40 + idx;
-      el.style.setProperty('--z', (idx % 8) + 'px');
-      el.style.zIndex = 100 + idx;
-
-      // small random scale variation
-      const s = 1 + rand(-0.03, 0.05);
-      el.style.transform += ` scale(${s})`;
-
-      // subtle shadow tweak based on z
-      el.style.boxShadow = `0 ${6 + idx/2}px ${18 + idx}px rgba(0,0,0,0.6)`;
-    });
-  }
-
-  // Wait for images to start loading before measuring
-  function whenImagesReady(callback) {
-    const imgs = Array.from(document.querySelectorAll('.item img'));
-    if (imgs.length === 0) { callback(); return; }
-
-    let loaded = 0;
-    imgs.forEach((img) => {
-      if (img.complete && img.naturalWidth !== 0) {
-        loaded++;
-      } else {
-        img.addEventListener('load', () => {
-          loaded++;
-          if (loaded === imgs.length) callback();
-        }, { once: true });
-        img.addEventListener('error', () => {
-          loaded++;
-          const src = img.getAttribute('src') || '[unknown]';
-          console.error(`Image failed to load: ${src}`);
-          logDiag(`Image failed to load: ${src}`);
-          if (loaded === imgs.length) callback();
-        }, { once: true });
+    a.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' || e.key === ' '){
+        a.click();
+        e.preventDefault();
       }
     });
-    if (loaded === imgs.length) callback();
-  }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    if (!itemsContainer) {
-      console.error('#items container missing');
-      logDiag('#items container missing in DOM');
-      return;
-    }
-
-    whenImagesReady(() => {
-      try {
-        placeItemsPile();
-      } catch (err) {
-        console.error('Error placing items:', err);
-        logDiag('Error placing items: ' + (err && err.message ? err.message : String(err)));
-      }
-
-      // responsive re-place (debounced)
-      let t = null;
-      window.addEventListener('resize', () => {
-        clearTimeout(t);
-        t = setTimeout(() => {
-          try { placeItemsPile(); } catch (e) {
-            console.error(e);
-            logDiag('Error on resize: ' + e.message);
-          }
-        }, 140);
-      });
-    });
-
-    // keyboard activation for anchors
-    const items = document.querySelectorAll(itemsSelector);
-    items.forEach((el) => {
-      el.setAttribute('tabindex', '0');
-      el.addEventListener('keydown', (ev) => {
-        if (ev.key === 'Enter' || ev.key === ' ') {
-          ev.preventDefault();
-          window.location.href = el.getAttribute('href');
-        }
-      });
-      el.addEventListener('click', () => {
-        el.classList.add('clicked');
-        setTimeout(() => el.classList.remove('clicked'), 150);
-      });
-    });
-
-    // small cinematic flicker effect on page load
-    document.body.style.transition = 'filter 400ms ease';
-    document.body.style.filter = 'brightness(0.96) saturate(0.9)';
-    setTimeout(() => document.body.style.filter = '', 900);
+    layer.appendChild(a);
   });
-})();
+}
+
+function setupAudio(){
+  const audio = document.getElementById('ambience');
+  const btn = document.querySelector('.mute');
+
+  if(!audio) return;
+
+  let enabled = false;
+
+  function setState(on){
+    enabled = on;
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    if(on && audio.src){
+      audio.volume = 0.28;
+      audio.play().catch(()=>{ /* gesture required */ });
+    } else {
+      audio.pause();
+    }
+  }
+
+  btn.addEventListener('click', () => setState(!enabled));
+
+  document.addEventListener('pointerdown', function once(){
+    if(!enabled) setState(true);
+    document.removeEventListener('pointerdown', once);
+  });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  mountItems();
+  setupAudio();
+});
