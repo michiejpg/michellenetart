@@ -1,11 +1,9 @@
-/* styles.css - tabletop layout and items */
-
 :root{
   --table-color: #f7efe5;
-  --table-wood: linear-gradient(135deg, #efe0c7 0%, #e7d5b7 50%, #e6d2ae 100%);
   --accent: #6b4f4f;
   --shadow: 12px 12px 22px rgba(0,0,0,0.16);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --item-size: 96px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 *{box-sizing:border-box}
@@ -21,7 +19,7 @@ body{
 
 .scene{width:100%;max-width:1100px}
 .table{
-  background: var(--table-wood);
+  background: linear-gradient(135deg, #efe0c7 0%, #e7d5b7 50%, #e6d2ae 100%);
   border-radius:12px;
   padding:28px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.12);
@@ -49,25 +47,35 @@ body{
 /* generic item style */
 .item{
   position:absolute;
-  display:inline-flex;
+  display:flex;
   align-items:center;
   justify-content:center;
-  width:96px;
-  height:96px;
-  background:rgba(255,255,255,0.95);
+  width:var(--item-size);
+  height:var(--item-size);
+  background:rgba(255,255,255,0.96);
   border-radius:10px;
   text-decoration:none;
   color:#111;
-  font-size:36px;
   box-shadow: var(--shadow);
   transition: transform 180ms ease, box-shadow 180ms ease;
   user-select:none;
   -webkit-user-select:none;
-  padding:8px;
+  padding:6px;
   text-align:center;
+  flex-direction:column;
+  overflow:hidden;
 }
 
-/* small label shown when focused or hovered */
+/* image inside item */
+.item img{
+  width:64%;
+  height:64%;
+  object-fit:cover;
+  border-radius:6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08) inset;
+}
+
+/* label shown but subtle */
 .item .label{
   display:block;
   font-size:12px;
@@ -75,30 +83,30 @@ body{
   color:#333;
 }
 
-/* hover/focus */
+/* rotation handled by CSS variable --rot (set by JS) */
+.item{
+  transform: rotate(var(--rot, 0deg));
+  will-change: transform;
+}
+
+/* hover/focus preserves rotation and adds scale/translate */
 .item:hover, .item:focus{
-  transform: scale(1.08) translateY(-4px);
+  transform: rotate(var(--rot, 0deg)) scale(1.08) translateY(-6px);
   box-shadow: 18px 18px 28px rgba(0,0,0,0.18);
   z-index:10;
   outline: none;
 }
 
-/* make emoji centered vertically with label below */
-.item {flex-direction:column}
+/* focus-visible for keyboard users */
+.item:focus-visible{
+  box-shadow: 0 0 0 3px rgba(107,79,79,0.12), 18px 18px 28px rgba(0,0,0,0.18);
+}
 
-/* scattered positions and rotations to make things look tossed out */
-.item-phone{ left: 10%; top: 18%; transform: rotate(-14deg); background: linear-gradient(180deg,#ffffff,#f3f6fb) }
-.item-keys { left: 32%; top: 9%; transform: rotate(25deg); background: linear-gradient(180deg,#fff9f1,#fff2e6) }
-.item-lipstick{ left: 72%; top: 14%; transform: rotate(-28deg); background: linear-gradient(180deg,#fff6fb,#fff0f6) }
-.item-card{ left: 15%; top: 52%; transform: rotate(6deg); background: linear-gradient(180deg,#fff,#f7fff8) }
-.item-photo{ left: 45%; top: 36%; transform: rotate(-6deg); background: linear-gradient(180deg,#fffdf8,#fff7ec) }
-.item-cup{ left: 62%; top: 52%; transform: rotate(10deg); background: linear-gradient(180deg,#fff,#f8fdfa) }
-.item-receipt{ left: 80%; top: 34%; transform: rotate(-48deg); width:68px; height:120px; border-radius:8px; font-size:20px; padding:12px 8px }
-.item-bracelet{ left: 28%; top: 72%; transform: rotate(-8deg); background: linear-gradient(180deg,#fff7fb,#fff1f6) }
-.item-glasses{ left: 6%; top: 68%; transform: rotate(6deg); background: linear-gradient(180deg,#fff,#f2f7ff) }
-.item-notebook{ left: 54%; top: 72%; transform: rotate(12deg); width:120px; height:120px; font-size:28px; border-radius:14px }
+/* make receipt and notebook a bit taller */
+.item[data-name="Receipt"]{ width:68px; height:120px; --item-size:120px; }
+.item[data-name="Notebook"]{ width:120px; height:120px; --item-size:120px; }
 
-/* accessible hidden text style */
+/* visually hidden helper */
 .visually-hidden{
   position:absolute!important;
   height:1px; width:1px;
@@ -109,7 +117,8 @@ body{
 
 /* responsive adjustments */
 @media (max-width:700px){
-  .item{width:72px;height:72px;font-size:26px}
-  .item-receipt{width:56px;height:98px;font-size:18px}
-  .item-notebook{width:92px;height:92px}
+  :root { --item-size: 72px; }
+  .item img{ width:62%; height:62%; }
+  .item[data-name="Receipt"]{ width:56px; height:98px; --item-size:98px; }
+  .item[data-name="Notebook"]{ width:92px; height:92px; --item-size:92px; }
 }
