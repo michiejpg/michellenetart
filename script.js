@@ -45,7 +45,7 @@ const ITEMS = [
   {
     id: "item6",
     label: "Torn Polaroid",
-    img: "assets/item6.png",
+    img: "polaroid.png",
     alt: "A torn Polaroid photo, faces blurred by motion",
     href: "clues/clue-6.html",
     top: "49%", left: "16%", width: 150, rot: -3, z: 2
