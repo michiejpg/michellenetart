@@ -1,12 +1,9 @@
-// Using remote Unsplash Source URLs to avoid local assets.
-// Note: These URLs may return different images over time.
-// Swap with fixed photo IDs later for unchanging visuals.
-
+// Configure the 10 items: image, label, position, rotation, size, and clue page target
 const ITEMS = [
   {
     id: "item1",
     label: "Smudged Lipstick",
-    img: "https://source.unsplash.com/500x500/?lipstick,makeup,red",
+    img: "assets/item1.png",
     alt: "A tube of lipstick, cap loose and color smudged",
     href: "clues/clue-1.html",
     top: "38%", left: "22%", width: 110, rot: -14, z: 2
@@ -14,7 +11,7 @@ const ITEMS = [
   {
     id: "item2",
     label: "Cracked Phone",
-    img: "https://source.unsplash.com/500x500/?broken,phone,cracked,screen",
+    img: "assets/item2.png",
     alt: "A phone with a cracked screen, faint fingerprints visible",
     href: "clues/clue-2.html",
     top: "58%", left: "58%", width: 170, rot: 7, z: 2
@@ -22,7 +19,7 @@ const ITEMS = [
   {
     id: "item3",
     label: "Diner Receipt",
-    img: "https://source.unsplash.com/500x500/?receipt,paper",
+    img: "assets/item3.png",
     alt: "A thermal receipt, edges wrinkled and ink fading",
     href: "clues/clue-3.html",
     top: "34%", left: "64%", width: 160, rot: -6, z: 2
@@ -30,7 +27,7 @@ const ITEMS = [
   {
     id: "item4",
     label: "House Key",
-    img: "https://source.unsplash.com/500x500/?house,key",
+    img: "assets/item4.png",
     alt: "A single house key on a worn leather tag",
     href: "clues/clue-4.html",
     top: "70%", left: "34%", width: 120, rot: 18, z: 2
@@ -38,7 +35,7 @@ const ITEMS = [
   {
     id: "item5",
     label: "Matchbook",
-    img: "https://source.unsplash.com/500x500/?matchbook,matches",
+    img: "assets/item5.png",
     alt: "A matchbook with a bar’s logo rubbed off",
     href: "clues/clue-5.html",
     top: "20%", left: "41%", width: 110, rot: 10, z: 2
@@ -46,7 +43,7 @@ const ITEMS = [
   {
     id: "item6",
     label: "Torn Polaroid",
-    img: "https://source.unsplash.com/500x500/?polaroid,photo",
+    img: "assets/item6.png",
     alt: "A torn Polaroid photo, faces blurred by motion",
     href: "clues/clue-6.html",
     top: "49%", left: "16%", width: 150, rot: -3, z: 2
@@ -54,7 +51,7 @@ const ITEMS = [
   {
     id: "item7",
     label: "Bus Ticket",
-    img: "https://source.unsplash.com/500x500/?bus,ticket",
+    img: "assets/item7.png",
     alt: "A bus ticket stub creased twice",
     href: "clues/clue-7.html",
     top: "63%", left: "74%", width: 150, rot: -8, z: 2
@@ -62,7 +59,7 @@ const ITEMS = [
   {
     id: "item8",
     label: "Broken Necklace",
-    img: "https://source.unsplash.com/500x500/?necklace,chain,broken",
+    img: "assets/item8.png",
     alt: "A thin chain with a snapped clasp and a small initial charm",
     href: "clues/clue-8.html",
     top: "27%", left: "78%", width: 130, rot: 15, z: 2
@@ -70,7 +67,7 @@ const ITEMS = [
   {
     id: "item9",
     label: "Scribbled Note",
-    img: "https://source.unsplash.com/500x500/?note,handwriting,paper",
+    img: "assets/item9.png",
     alt: "A small note card with hurried pencil writing",
     href: "clues/clue-9.html",
     top: "76%", left: "12%", width: 140, rot: -16, z: 2
@@ -78,7 +75,7 @@ const ITEMS = [
   {
     id: "item10",
     label: "Hotel Keycard",
-    img: "https://source.unsplash.com/500x500/?hotel,keycard",
+    img: "assets/item10.png",
     alt: "A striped keycard with a dull sheen",
     href: "clues/clue-10.html",
     top: "14%", left: "14%", width: 120, rot: -2, z: 2
@@ -107,7 +104,6 @@ function mountItems(){
     const fallback = document.createElement('span');
     fallback.className = 'fallback';
     fallback.textContent = it.label;
-    fallback.style.display = 'none';
     img.addEventListener('error', () => {
       fallback.style.display = 'grid';
     }, { once: true });
@@ -130,16 +126,14 @@ function setupAudio(){
   const audio = document.getElementById('ambience');
   const btn = document.querySelector('.mute');
 
-  if(!audio) return;
-
   let enabled = false;
 
   function setState(on){
     enabled = on;
     btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-    if(on && audio.src){
+    if(on){
       audio.volume = 0.28;
-      audio.play().catch(()=>{ /* gesture required */ });
+      audio.play().catch(()=>{ /* user gesture required, ignored */ });
     } else {
       audio.pause();
     }
@@ -147,6 +141,7 @@ function setupAudio(){
 
   btn.addEventListener('click', () => setState(!enabled));
 
+  // Start muted until user interacts; clicking anywhere enables, then we restore button state
   document.addEventListener('pointerdown', function once(){
     if(!enabled) setState(true);
     document.removeEventListener('pointerdown', once);
