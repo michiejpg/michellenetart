@@ -10,71 +10,63 @@
   <main class="scene" role="main" aria-labelledby="title">
     <h1 id="title" class="visually-hidden">Where Is Maya? — Items on Table</h1>
 
-    <div class="table" id="table">
+    <div class="table" id="table" aria-describedby="desc">
+      <div id="vignette" aria-hidden="true"></div>
       <header class="header">
         <h2>Maya's Purse</h2>
-        <p>Click an item to read a clue.</p>
+        <p id="desc">Click an item to read a clue. The scene is intentionally unsettling.</p>
       </header>
 
       <div class="items" id="items">
+        <!-- Hotlinked transparent PNGs from public sources (replace any broken URLs if necessary) -->
         <a href="clue1.html" class="item" data-name="Phone" title="Phone" aria-label="Phone">
-          <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phone" loading="lazy">
-          <span class="label">Phone</span>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/HD_transparent_picture.png" alt="Phone" loading="lazy">
         </a>
 
         <a href="clue2.html" class="item" data-name="Keys" title="Keys" aria-label="Keys">
-          <img src="https://images.unsplash.com/photo-1583205771813-70c2f2d5f4b6?auto=format&fit=crop&w=600&q=80" alt="Keys" loading="lazy">
-          <span class="label">Keys</span>
+          <img src="https://cdn.pixabay.com/photo/2016/03/31/20/11/key-1291313_960_720.png" alt="Keys" loading="lazy">
         </a>
 
         <a href="clue3.html" class="item" data-name="Lipstick" title="Lipstick" aria-label="Lipstick">
-          <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=600&q=80" alt="Lipstick" loading="lazy">
-          <span class="label">Lipstick</span>
+          <img src="https://cdn.pixabay.com/photo/2017/05/07/08/56/lipstick-2296295_960_720.png" alt="Lipstick" loading="lazy">
         </a>
 
         <a href="clue4.html" class="item" data-name="Transit Card" title="Transit Card" aria-label="Transit Card">
-          <img src="https://images.unsplash.com/photo-1538495242142-4b6f6d3b4f1f?auto=format&fit=crop&w=600&q=80" alt="Transit Card" loading="lazy">
-          <span class="label">Transit Card</span>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/62/Blank_card_transparent.png" alt="Transit Card" loading="lazy">
         </a>
 
         <a href="clue5.html" class="item" data-name="Photo" title="Photo" aria-label="Photo">
-          <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=600&q=80" alt="Printed photo" loading="lazy">
-          <span class="label">Photo</span>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/Photograph-blank.png" alt="Photo" loading="lazy">
         </a>
 
         <a href="clue6.html" class="item" data-name="Coffee" title="Coffee Lid" aria-label="Coffee Lid">
-          <img src="https://images.unsplash.com/photo-1506368249639-73a05d6f6488?auto=format&fit=crop&w=600&q=80" alt="Coffee cup" loading="lazy">
-          <span class="label">Coffee</span>
+          <img src="https://cdn.pixabay.com/photo/2017/05/10/17/24/coffee-2306471_960_720.png" alt="Coffee cup" loading="lazy">
         </a>
 
         <a href="clue7.html" class="item" data-name="Receipt" title="Receipt" aria-label="Receipt">
-          <img src="https://images.unsplash.com/photo-1542736667-069246bdbc97?auto=format&fit=crop&w=600&q=80" alt="Receipt" loading="lazy">
-          <span class="label">Receipt</span>
+          <img src="https://cdn.pixabay.com/photo/2014/04/02/10/03/receipt-303981_960_720.png" alt="Receipt" loading="lazy">
         </a>
 
         <a href="clue8.html" class="item" data-name="Bracelet" title="Bracelet" aria-label="Bracelet">
-          <img src="https://images.unsplash.com/photo-1520975698512-37d8a0d4d4b6?auto=format&fit=crop&w=600&q=80" alt="Bracelet" loading="lazy">
-          <span class="label">Bracelet</span>
+          <img src="https://cdn.pixabay.com/photo/2014/04/02/14/11/bracelet-309050_960_720.png" alt="Bracelet" loading="lazy">
         </a>
 
         <a href="clue9.html" class="item" data-name="Sunglasses" title="Sunglasses" aria-label="Sunglasses">
-          <img src="https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&w=600&q=80" alt="Sunglasses" loading="lazy">
-          <span class="label">Sunglasses</span>
+          <img src="https://cdn.pixabay.com/photo/2013/07/12/17/20/sunglasses-154063_960_720.png" alt="Sunglasses" loading="lazy">
         </a>
 
         <a href="clue10.html" class="item" data-name="Notebook" title="Notebook" aria-label="Notebook">
-          <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=600&q=80" alt="Notebook" loading="lazy">
-          <span class="label">Notebook</span>
+          <img src="https://cdn.pixabay.com/photo/2012/04/12/20/35/notebook-30740_960_720.png" alt="Notebook" loading="lazy">
         </a>
       </div>
 
       <footer class="footer">
-        <small>Designed as an interactive introduction. Use responsibly.</small>
+        <small>Interactive demo — unsettling styling applied intentionally.</small>
       </footer>
     </div>
   </main>
 
-  <!-- lightweight diagnostics overlay -->
+  <!-- diagnostics overlay -->
   <div id="diag" aria-live="polite" role="status" class="diag" hidden>
     <strong>Diagnostics</strong>
     <ul id="diag-list"></ul>
