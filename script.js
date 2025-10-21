@@ -5,7 +5,7 @@ const ITEMS = [
   {
     id: "item1",
     label: "Smudged Lipstick",
-    img: "assets/item1.png",
+    img: "lipstick.png",
     alt: "A tube of lipstick, cap loose and color smudged",
     href: "clues/clue-1.html",
     top: "38%", left: "22%", width: 110, rot: -14, z: 2
