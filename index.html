@@ -2,76 +2,43 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Where Is Maya? — Items</title>
+  <title>The Table</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <main class="scene" role="main" aria-labelledby="title">
-    <h1 id="title" class="visually-hidden">Where Is Maya? — Items on Table</h1>
+  <div class="scene">
+    <div class="vignette" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
 
-    <div class="table" id="table" aria-describedby="desc">
-      <div id="vignette" aria-hidden="true"></div>
-      <header class="header">
-        <h2>Maya's Purse</h2>
-        <p id="desc">Click an item to read a clue. The scene is intentionally unsettling.</p>
-      </header>
+    <header class="header">
+      <h1 class="title">her things</h1>
+      <button class="mute" aria-pressed="true" aria-label="Toggle ambience sound">
+        <span class="mute__icon">🔊</span><span class="mute__label">Sound</span>
+      </button>
+    </header>
 
-      <div class="items" id="items">
-        <!-- Hotlinked transparent PNGs from public sources (replace any broken URLs if necessary) -->
-        <a href="clue1.html" class="item" data-name="Phone" title="Phone" aria-label="Phone">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/HD_transparent_picture.png" alt="Phone" loading="lazy">
-        </a>
+    <main class="table" aria-label="Items scattered from a purse on a table">
+      <!-- Purse image (remote) -->
+      <img
+        class="purse"
+        src="https://source.unsplash.com/900x700/?purse,bag,leather,spilled"
+        alt="A purse tipped on its side, contents spilled" />
 
-        <a href="clue2.html" class="item" data-name="Keys" title="Keys" aria-label="Keys">
-          <img src="https://cdn.pixabay.com/photo/2016/03/31/20/11/key-1291313_960_720.png" alt="Keys" loading="lazy">
-        </a>
+      <!-- Items injected by script.js -->
+      <div id="items-layer" class="items-layer"></div>
+    </main>
 
-        <a href="clue3.html" class="item" data-name="Lipstick" title="Lipstick" aria-label="Lipstick">
-          <img src="https://cdn.pixabay.com/photo/2017/05/07/08/56/lipstick-2296295_960_720.png" alt="Lipstick" loading="lazy">
-        </a>
-
-        <a href="clue4.html" class="item" data-name="Transit Card" title="Transit Card" aria-label="Transit Card">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/6/62/Blank_card_transparent.png" alt="Transit Card" loading="lazy">
-        </a>
-
-        <a href="clue5.html" class="item" data-name="Photo" title="Photo" aria-label="Photo">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/Photograph-blank.png" alt="Photo" loading="lazy">
-        </a>
-
-        <a href="clue6.html" class="item" data-name="Coffee" title="Coffee Lid" aria-label="Coffee Lid">
-          <img src="https://cdn.pixabay.com/photo/2017/05/10/17/24/coffee-2306471_960_720.png" alt="Coffee cup" loading="lazy">
-        </a>
-
-        <a href="clue7.html" class="item" data-name="Receipt" title="Receipt" aria-label="Receipt">
-          <img src="https://cdn.pixabay.com/photo/2014/04/02/10/03/receipt-303981_960_720.png" alt="Receipt" loading="lazy">
-        </a>
-
-        <a href="clue8.html" class="item" data-name="Bracelet" title="Bracelet" aria-label="Bracelet">
-          <img src="https://cdn.pixabay.com/photo/2014/04/02/14/11/bracelet-309050_960_720.png" alt="Bracelet" loading="lazy">
-        </a>
-
-        <a href="clue9.html" class="item" data-name="Sunglasses" title="Sunglasses" aria-label="Sunglasses">
-          <img src="https://cdn.pixabay.com/photo/2013/07/12/17/20/sunglasses-154063_960_720.png" alt="Sunglasses" loading="lazy">
-        </a>
-
-        <a href="clue10.html" class="item" data-name="Notebook" title="Notebook" aria-label="Notebook">
-          <img src="https://cdn.pixabay.com/photo/2012/04/12/20/35/notebook-30740_960_720.png" alt="Notebook" loading="lazy">
-        </a>
-      </div>
-
-      <footer class="footer">
-        <small>Interactive demo — unsettling styling applied intentionally.</small>
-      </footer>
-    </div>
-  </main>
-
-  <!-- diagnostics overlay -->
-  <div id="diag" aria-live="polite" role="status" class="diag" hidden>
-    <strong>Diagnostics</strong>
-    <ul id="diag-list"></ul>
+    <footer class="footer">
+      <p>Click an item to see what it remembers.</p>
+    </footer>
   </div>
 
+  <!-- Optional ambience; no remote audio provided by default -->
+  <audio id="ambience" preload="auto" loop></audio>
   <script src="script.js"></script>
 </body>
 </html>
