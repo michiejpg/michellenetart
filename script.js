@@ -1,9 +1,6 @@
-// script.js - randomized placement + diagnostics
+// script.js - realistic overlapping scatter, randomized tilt/z-index, hotlink diagnostics
 (function () {
-  const MAX_ATTEMPTS = 200; // attempts per item to find a non-overlapping spot
-  const GAP = 8; // minimum gap between items in px
   const itemsSelector = '.item';
-  const table = document.getElementById('table');
   const itemsContainer = document.getElementById('items');
   const diag = document.getElementById('diag');
   const diagList = document.getElementById('diag-list');
@@ -20,60 +17,58 @@
     return Math.random() * (max - min) + min;
   }
 
-  function placeItems() {
+  // place items allowing slight overlaps; give a z-order and tilt for realism
+  function placeItemsPile() {
     const items = Array.from(itemsContainer.querySelectorAll(itemsSelector));
     const containerRect = itemsContainer.getBoundingClientRect();
-    const placed = []; // {x, y, w, h}
 
-    items.forEach((el) => {
-      const w = el.offsetWidth || parseFloat(getComputedStyle(el).width) || 96;
-      const h = el.offsetHeight || parseFloat(getComputedStyle(el).height) || 96;
+    // Prefer cluster center around table center with some spread
+    const centerX = containerRect.width * 0.52;
+    const centerY = containerRect.height * 0.52;
+    const spreadX = Math.max(120, containerRect.width * 0.38);
+    const spreadY = Math.max(120, containerRect.height * 0.36);
 
-      let attempt = 0;
-      let x, y, ok;
+    // Randomize a base offset for the pile so each load is different
+    const baseOffsetX = rand(-containerRect.width * 0.06, containerRect.width * 0.06);
+    const baseOffsetY = rand(-containerRect.height * 0.04, containerRect.height * 0.04);
 
-      while (attempt < MAX_ATTEMPTS) {
-        const minX = 8;
-        const minY = 8;
-        const maxX = Math.max(8, containerRect.width - w - 8);
-        const maxY = Math.max(8, containerRect.height - h - 8);
+    // Shuffle items so z-order varies
+    const shuffled = items.sort(() => Math.random() - 0.5);
 
-        x = Math.round(rand(minX, maxX));
-        y = Math.round(rand(minY, maxY));
+    shuffled.forEach((el, idx) => {
+      const w = el.offsetWidth || 100;
+      const h = el.offsetHeight || 100;
 
-        ok = true;
-        for (const p of placed) {
-          const dx = (x + w/2) - (p.x + p.w/2);
-          const dy = (y + h/2) - (p.y + p.h/2);
-          const minDistX = (w + p.w)/2 + GAP;
-          const minDistY = (h + p.h)/2 + GAP;
-          if (Math.abs(dx) < minDistX && Math.abs(dy) < minDistY) {
-            ok = false;
-            break;
-          }
-        }
+      // position biased toward pile center with gaussian-ish spread
+      const x = Math.round(centerX + baseOffsetX + (rand(-1,1) + rand(-1,1)) * 0.5 * spreadX - w/2);
+      const y = Math.round(centerY + baseOffsetY + (rand(-1,1) + rand(-1,1)) * 0.5 * spreadY - h/2);
 
-        if (ok) break;
-        attempt++;
-      }
+      el.style.left = Math.max(6, Math.min(containerRect.width - w - 6, x)) + 'px';
+      el.style.top = Math.max(6, Math.min(containerRect.height - h - 6, y)) + 'px';
 
-      if (!ok) {
-        // couldn't find a non-overlapping spot; place anyway
-        x = Math.round(rand(8, Math.max(8, containerRect.width - w - 8)));
-        y = Math.round(rand(8, Math.max(8, containerRect.height - h - 8)));
-        logDiag(`Placed "${el.dataset.name || el.title || 'item'}" with overlap (fallback).`);
-      }
-
-      el.style.left = x + 'px';
-      el.style.top = y + 'px';
-
-      const rot = Math.round(rand(-40, 40));
+      // rotation - more subtle for realism
+      const rot = rand(-28, 28);
       el.style.setProperty('--rot', rot + 'deg');
 
-      placed.push({ x, y, w, h });
+      // tilt in X for fake 3D
+      const tiltX = rand(-6, 10);
+      el.style.setProperty('--tiltX', tiltX + 'deg');
+
+      // z-index: later items sit on top
+      const z = 40 + idx;
+      el.style.setProperty('--z', (idx % 8) + 'px');
+      el.style.zIndex = 100 + idx;
+
+      // small random scale variation
+      const s = 1 + rand(-0.03, 0.05);
+      el.style.transform += ` scale(${s})`;
+
+      // subtle shadow tweak based on z
+      el.style.boxShadow = `0 ${6 + idx/2}px ${18 + idx}px rgba(0,0,0,0.6)`;
     });
   }
 
+  // Wait for images to start loading before measuring
   function whenImagesReady(callback) {
     const imgs = Array.from(document.querySelectorAll('.item img'));
     if (imgs.length === 0) { callback(); return; }
@@ -89,59 +84,45 @@
         }, { once: true });
         img.addEventListener('error', () => {
           loaded++;
-          const src = img.getAttribute('src') || img.dataset.src || '[unknown]';
+          const src = img.getAttribute('src') || '[unknown]';
           console.error(`Image failed to load: ${src}`);
           logDiag(`Image failed to load: ${src}`);
-          // still count it to avoid blocking placement
           if (loaded === imgs.length) callback();
         }, { once: true });
       }
     });
-
     if (loaded === imgs.length) callback();
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    // basic sanity checks
     if (!itemsContainer) {
-      console.error('Missing #items container. Ensure index.html includes <div id="items">...');
-      logDiag('Missing #items container (check index.html).');
+      console.error('#items container missing');
+      logDiag('#items container missing in DOM');
       return;
     }
-    if (!table) {
-      console.error('Missing #table container. Ensure index.html includes <div id="table">...');
-      logDiag('Missing #table container (check index.html).');
-      return;
-    }
-
-    // catch and display global errors
-    window.addEventListener('error', (e) => {
-      console.error('Global error:', e.message, e.filename + ':' + e.lineno);
-      logDiag(`Error: ${e.message} (${e.filename}:${e.lineno})`);
-    });
 
     whenImagesReady(() => {
       try {
-        placeItems();
+        placeItemsPile();
       } catch (err) {
         console.error('Error placing items:', err);
         logDiag('Error placing items: ' + (err && err.message ? err.message : String(err)));
       }
 
-      // Re-place on window resize to adapt to different viewport sizes (debounced)
-      let resizeTimer = null;
+      // responsive re-place (debounced)
+      let t = null;
       window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => {
-          try { placeItems(); } catch (err) {
-            console.error('Error on resize placement:', err);
-            logDiag('Error on resize placement: ' + (err && err.message ? err.message : String(err)));
+        clearTimeout(t);
+        t = setTimeout(() => {
+          try { placeItemsPile(); } catch (e) {
+            console.error(e);
+            logDiag('Error on resize: ' + e.message);
           }
-        }, 120);
+        }, 140);
       });
     });
 
-    // Accessibility: Enter/Space to follow anchor
+    // keyboard activation for anchors
     const items = document.querySelectorAll(itemsSelector);
     items.forEach((el) => {
       el.setAttribute('tabindex', '0');
@@ -156,5 +137,10 @@
         setTimeout(() => el.classList.remove('clicked'), 150);
       });
     });
+
+    // small cinematic flicker effect on page load
+    document.body.style.transition = 'filter 400ms ease';
+    document.body.style.filter = 'brightness(0.96) saturate(0.9)';
+    setTimeout(() => document.body.style.filter = '', 900);
   });
 })();
