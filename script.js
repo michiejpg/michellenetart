@@ -1,90 +1,31 @@
-// Bookstore interactions (cozy version)
-// - Enter reveals bookshelf, starts ambient after user gesture
-// - Clicking a book plays click and transitions to the book page
-// - Back links behave similarly on book pages
+// script.js - no heavy logic required; items are anchors to clue pages
+// Add keyboard-accessible focus outlines and simple click analytics placeholder
 
-(function(){
-  const enterBtn = document.getElementById('enterBtn');
-  const bookroom = document.getElementById('bookroom');
-  const overlay = document.getElementById('transitionOverlay');
-  const clickFX = document.getElementById('clickFX');
-  const ambient = document.getElementById('ambientLoop');
+document.addEventListener('DOMContentLoaded', () => {
+  const items = document.querySelectorAll('.item');
 
-  // Helper to play sound (guard for autoplay/muted browsers)
-  function tryPlayAudio(audioEl){
-    if(!audioEl) return;
-    try {
-      audioEl.currentTime = 0;
-      const p = audioEl.play();
-      if(p && p.catch){
-        p.catch(()=>{/* ignore autoplay restrictions */});
-      }
-    } catch(e){}
-  }
+  items.forEach((el, i) => {
+    // Simple data attribute (for future analytics)
+    el.dataset.itemIndex = i + 1;
 
-  // Reveal the bookshelf and start ambient audio (user gesture required)
-  enterBtn && enterBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    enterBtn.disabled = true;
-    enterBtn.classList.add('pressed');
-    // small entrance animation delay
-    setTimeout(() => {
-      document.querySelector('.entry').style.display = 'none';
-      bookroom.classList.remove('hidden');
-      bookroom.setAttribute('aria-hidden', 'false');
-      const first = document.querySelector('.book-link');
-      first && first.focus();
-      // Start gentle ambient sound on user gesture
-      tryPlayAudio(ambient);
-    }, 320);
-  });
-
-  // Play click/pop sound safely
-  function tryPlayClick(){
-    tryPlayAudio(clickFX);
-  }
-
-  // Attach handlers to book links
-  document.querySelectorAll('.book-link').forEach(a => {
-    a.addEventListener('click', function(e){
-      e.preventDefault();
-      const href = this.getAttribute('href');
-      // Play click
-      tryPlayClick();
-      // Add a soft overlay and slight scale for a tactile transition
-      overlay.classList.add('show');
-      overlay.setAttribute('aria-hidden','false');
-      document.body.style.filter = 'brightness(0.95)';
-      setTimeout(() => { window.location.href = href; }, 420);
-    });
-
-    a.addEventListener('keydown', (ev) => {
-      if(ev.key === 'Enter' || ev.key === ' '){
+    // allow Enter key navigation (anchors handle this by default)
+    el.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter' || ev.key === ' ') {
+        // Space by default scrolls; prevent and simulate click.
         ev.preventDefault();
-        a.click();
+        el.click();
       }
     });
-  });
 
-  // Back links (on book pages) should show overlay and navigate back
-  document.querySelectorAll('.back-link').forEach(b => {
-    b.addEventListener('click', function(e){
-      e.preventDefault();
-      tryPlayClick();
-      overlay.classList.add('show');
-      overlay.setAttribute('aria-hidden','false');
-      setTimeout(()=>{ window.location.href = this.getAttribute('href'); }, 320);
+    // small ripple of scale on click for feedback
+    el.addEventListener('click', (ev) => {
+      // brief visual feedback
+      el.style.transform += ' scale(0.98)';
+      setTimeout(() => {
+        // restore transform by removing inline style (so CSS takes over)
+        el.style.transform = '';
+      }, 120);
+      // In a real deployment, you might log clicks with fetch() to an analytics endpoint.
     });
   });
-
-  // Allow clicking overlay to cancel transition
-  overlay.addEventListener('click', () => {
-    overlay.classList.remove('show');
-    overlay.setAttribute('aria-hidden','true');
-    document.body.style.filter = '';
-  });
-
-  // Accessibility: stop ambient sound when navigating away/inactive
-  window.addEventListener('pagehide', () => { if(ambient){ ambient.pause(); ambient.currentTime = 0; } });
-
-})();
+});
