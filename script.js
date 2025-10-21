@@ -7,7 +7,7 @@ const ITEMS = [
     label: "Smudged Lipstick",
     img: "lipstick.png",
     alt: "A tube of lipstick, cap loose and color smudged",
-    href: "clues/clue-1.html",
+    href: "clue1.html",
     top: "38%", left: "22%", width: 110, rot: -14, z: 2
   },
   {
@@ -15,7 +15,7 @@ const ITEMS = [
     label: "Cracked Phone",
     img: "phone.png",
     alt: "A phone with a cracked screen, faint fingerprints visible",
-    href: "clues/clue-2.html",
+    href: "clue2.html",
     top: "58%", left: "58%", width: 170, rot: 7, z: 2
   },
   {
@@ -23,7 +23,7 @@ const ITEMS = [
     label: "Diner Receipt",
     img: "receipt.png",
     alt: "A thermal receipt, edges wrinkled and ink fading",
-    href: "clues/clue-3.html",
+    href: "clue3.html",
     top: "34%", left: "64%", width: 160, rot: -6, z: 2
   },
   {
@@ -31,7 +31,7 @@ const ITEMS = [
     label: "House Key",
     img: "key.png",
     alt: "A single house key on a worn leather tag",
-    href: "clues/clue-4.html",
+    href: "clue4.html",
     top: "70%", left: "34%", width: 120, rot: 18, z: 2
   },
   {
@@ -39,7 +39,7 @@ const ITEMS = [
     label: "Matchbook",
     img: "matchbook.png",
     alt: "A matchbook with a bar’s logo rubbed off",
-    href: "clues/clue-5.html",
+    href: "clue5.html",
     top: "20%", left: "41%", width: 110, rot: 10, z: 2
   },
   {
@@ -47,7 +47,7 @@ const ITEMS = [
     label: "Torn Polaroid",
     img: "polaroid.png",
     alt: "A torn Polaroid photo, faces blurred by motion",
-    href: "clues/clue-6.html",
+    href: "clue6.html",
     top: "49%", left: "16%", width: 150, rot: -3, z: 2
   },
   {
@@ -55,7 +55,7 @@ const ITEMS = [
     label: "Bus Ticket",
     img: "ticket.png",
     alt: "A bus ticket stub creased twice",
-    href: "clues/clue-7.html",
+    href: "clue7.html",
     top: "63%", left: "74%", width: 150, rot: -8, z: 2
   },
   {
@@ -63,7 +63,7 @@ const ITEMS = [
     label: "Broken Necklace",
     img: "necklace.png",
     alt: "A thin chain with a snapped clasp and a small initial charm",
-    href: "clues/clue-8.html",
+    href: "clue8.html",
     top: "27%", left: "78%", width: 130, rot: 15, z: 2
   },
   {
@@ -71,7 +71,7 @@ const ITEMS = [
     label: "Scribbled Note",
     img: "note.png",
     alt: "A small note card with hurried pencil writing",
-    href: "clues/clue-9.html",
+    href: "clue9.html",
     top: "76%", left: "12%", width: 140, rot: -16, z: 2
   },
   {
@@ -79,7 +79,7 @@ const ITEMS = [
     label: "Hotel Keycard",
     img: "keycard.png",
     alt: "A striped keycard with a dull sheen",
-    href: "clues/clue-10.html",
+    href: "clue10.html",
     top: "14%", left: "14%", width: 120, rot: -2, z: 2
   }
 ];
