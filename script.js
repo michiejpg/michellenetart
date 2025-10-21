@@ -77,7 +77,7 @@ const ITEMS = [
   {
     id: "item10",
     label: "Hotel Keycard",
-    img: "assets/item10.png",
+    img: "keycard.png",
     alt: "A striped keycard with a dull sheen",
     href: "clues/clue-10.html",
     top: "14%", left: "14%", width: 120, rot: -2, z: 2
