@@ -106,6 +106,22 @@ body{
 .item[data-name="Receipt"]{ width:68px; height:120px; --item-size:120px; }
 .item[data-name="Notebook"]{ width:120px; height:120px; --item-size:120px; }
 
+/* diagnostics overlay */
+.diag{
+  position:fixed;
+  left:12px;
+  bottom:12px;
+  background:rgba(0,0,0,0.8);
+  color:#fff;
+  padding:10px 12px;
+  border-radius:8px;
+  font-size:13px;
+  z-index:9999;
+  max-width:320px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+}
+.diag ul{ margin:6px 0 0; padding-left:18px; max-height:160px; overflow:auto; }
+
 /* visually hidden helper */
 .visually-hidden{
   position:absolute!important;
