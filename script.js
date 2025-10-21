@@ -13,7 +13,7 @@ const ITEMS = [
   {
     id: "item2",
     label: "Cracked Phone",
-    img: "assets/item2.png",
+    img: "phone.png",
     alt: "A phone with a cracked screen, faint fingerprints visible",
     href: "clues/clue-2.html",
     top: "58%", left: "58%", width: 170, rot: 7, z: 2
@@ -21,7 +21,7 @@ const ITEMS = [
   {
     id: "item3",
     label: "Diner Receipt",
-    img: "assets/item3.png",
+    img: "receipt.png",
     alt: "A thermal receipt, edges wrinkled and ink fading",
     href: "clues/clue-3.html",
     top: "34%", left: "64%", width: 160, rot: -6, z: 2
@@ -29,7 +29,7 @@ const ITEMS = [
   {
     id: "item4",
     label: "House Key",
-    img: "assets/item4.png",
+    img: "key.png",
     alt: "A single house key on a worn leather tag",
     href: "clues/clue-4.html",
     top: "70%", left: "34%", width: 120, rot: 18, z: 2
@@ -37,7 +37,7 @@ const ITEMS = [
   {
     id: "item5",
     label: "Matchbook",
-    img: "assets/item5.png",
+    img: "matchbook.png",
     alt: "A matchbook with a bar’s logo rubbed off",
     href: "clues/clue-5.html",
     top: "20%", left: "41%", width: 110, rot: 10, z: 2
@@ -53,7 +53,7 @@ const ITEMS = [
   {
     id: "item7",
     label: "Bus Ticket",
-    img: "assets/item7.png",
+    img: "ticket.png",
     alt: "A bus ticket stub creased twice",
     href: "clues/clue-7.html",
     top: "63%", left: "74%", width: 150, rot: -8, z: 2
@@ -61,7 +61,7 @@ const ITEMS = [
   {
     id: "item8",
     label: "Broken Necklace",
-    img: "assets/item8.png",
+    img: "necklace.png",
     alt: "A thin chain with a snapped clasp and a small initial charm",
     href: "clues/clue-8.html",
     top: "27%", left: "78%", width: 130, rot: 15, z: 2
@@ -69,7 +69,7 @@ const ITEMS = [
   {
     id: "item9",
     label: "Scribbled Note",
-    img: "assets/item9.png",
+    img: "note.png",
     alt: "A small note card with hurried pencil writing",
     href: "clues/clue-9.html",
     top: "76%", left: "12%", width: 140, rot: -16, z: 2
