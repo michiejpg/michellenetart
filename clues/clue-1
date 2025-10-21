@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Clue 1 — Lipstick</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="../styles.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+</head>
+<body class="page">
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <div class="topbar">
+    <a href="../index.html">← Back to the table</a>
+    <span>Clue 1</span>
+  </div>
+
+  <main class="clue">
+    <h2><span class="glitch" data-text="Smudged Lipstick">Smudged Lipstick</span></h2>
+    <img class="item-shot" src="" alt="Smudged lipstick" onerror="this.style.display='none'"/>
+    <div class="body">
+      <p>Red, the shade she never wore to work. The cap isn’t the one it came with—this one’s from a different brand. Someone borrowed it, or swapped it, or put it back wrong in a hurry.</p>
+      <p>Along the rim, a faint gray smudge. It looks like ash. She doesn’t smoke.</p>
+      <p>In the case’s tiny mirror: a thumbprint dragged across the glass, angling left. Smudged at 1:17, maybe… if the clock reflection is right.</p>
+    </div>
+  </main>
+
+  <div class="bottombar">
+    <a href="./clue-2.html">Next clue →</a>
+  </div>
+</body>
+</html>
